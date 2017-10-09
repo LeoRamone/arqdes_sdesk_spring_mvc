@@ -3,14 +3,20 @@ package br.usjt.sdesk.model.service;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import br.usjt.sdesk.model.dao.FilaDAO;
 import br.usjt.sdesk.model.entity.Fila;
 
+
+@Service
 public class FilaService {
 	private FilaDAO dao;
 	
-	public FilaService(){
-		dao = new FilaDAO();
+	@Autowired
+	public FilaService(FilaDAO dao){
+		this.dao = dao;
 	}
 	
 	public ArrayList<Fila> listarFilas() throws IOException{

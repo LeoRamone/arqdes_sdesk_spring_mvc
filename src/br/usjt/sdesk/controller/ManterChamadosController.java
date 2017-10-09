@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,16 +21,23 @@ import br.usjt.sdesk.model.service.ChamadoService;
 import br.usjt.sdesk.model.service.FilaService;
 
 @Controller
-public class ManterChamadosController {
+public class ManterChamadosController {	
+	private FilaService filaService;
+	private ChamadoService chamadoService;
+	
+	@Autowired
+	public ManterChamadosController(FilaService fs, ChamadoService cs){
+		filaService = fs;
+		chamadoService = cs;
+	}
 
 	@RequestMapping("index")
 	public String inicio() {
 		return "index";
 	}
-	
-	private ArrayList<Fila> carregarFilas() throws IOException{
-		FilaService service = new FilaService();
-		return service.listarFilas();
+
+	private ArrayList<Fila> carregarFilas() throws IOException {
+		return filaService.listarFilas();
 	}
 
 	@RequestMapping("/listar_filas")
@@ -55,11 +63,10 @@ public class ManterChamadosController {
 				e.printStackTrace();
 				return "Erro";
 			}
-		}else{
-			ChamadoService service = new ChamadoService();
+		} else {
 
 			try {
-				int idChamado = service.novoChamado(chamado);
+				int idChamado = chamadoService.novoChamado(chamado);
 				chamado.setNumero(idChamado);
 				return "NumeroChamado";
 			} catch (IOException e) {
@@ -68,60 +75,51 @@ public class ManterChamadosController {
 			}
 		}
 	}
-	
+
 	@RequestMapping("/listar_filas_fechar")
 	public String listarFilasFechar(Model model) {
 		try {
-			model.addAttribute("lista", carregarFilas());
-			return "ListarFilasFechar";
+			ArrayList<Fila> filas = filaService.listarFilas();
+			model.addAttribute("filas", filas);
+			return "ChamadoFechar";
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "Erro";
 		}
 	}
-	
-	@RequestMapping("/listar_chamados_fechar")
-	public String listarChamadosFechar(Fila fila, Model model) {
-		try {
-			FilaService fService = new FilaService();
-			fila = fService.carregar(fila.getId());
-			model.addAttribute("fila", fila);
-			
-			ChamadoService service = new ChamadoService();
-			ArrayList<Chamado> chamados = service.listarChamadosAbertos(fila);
-			model.addAttribute("chamados", chamados);
 
-			return "ListarChamadosFechar";
+	@RequestMapping("/listar_chamados_abertos")
+	public String listarChamadosAbertos(Fila fila, Model model) {
+		try {
+			fila = filaService.carregar(fila.getId());
+			model.addAttribute("fila", fila);
+
+			ArrayList<Chamado> chamados = chamadoService.listarChamadosAbertos(fila);
+			model.addAttribute("chamados", chamados);
+			return "ChamadoFecharSelecionar";
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "Erro";
 		}
 	}
-	
-	/*
-	 * Map guarda valores de chave e valor String, String =
-	 * Chave, valor da chave(identificador)
-	 * */
+
 	@RequestMapping("/fechar_chamados")
-	public String fecharChamados(@RequestParam Map<String, String> allRequestParams) {
+	public String fecharChamados(
+			@RequestParam Map<String, String> allRequestParams) {
 		try {
-			//Key set retorna um conjuto com o nome das chaves/parâmetros
 			Set<String> chaves = allRequestParams.keySet();
-			//Iterator pega os parametros
 			Iterator<String> i = chaves.iterator();
 			ArrayList<Integer> lista = new ArrayList<>();
 			while (i.hasNext()) {
-				//Pega o valor do iterator
 				String chave = i.next();
-				
-				String valor =  allRequestParams.get(chave);
+				String valor = (String) allRequestParams.get(chave);
 				if (valor.equals("on")) {
 					lista.add(Integer.parseInt(chave));
 				}
 			}
 			if (lista.size() > 0) {
-				ChamadoService service = new ChamadoService();
-				service.fecharChamados(lista);
+				chamadoService.fecharChamados(lista);
 			}
 			return "ChamadoFechado";
 		} catch (IOException e) {
@@ -129,34 +127,33 @@ public class ManterChamadosController {
 			return "Erro";
 		}
 	}
-	
-	@RequestMapping("/listar_filas_consultar")
-	public String listarFilasConsultar(Model model) {
+
+	@RequestMapping("/listar_filas_exibir")
+	public String listarFilasExibir(Model model) {
 		try {
-			model.addAttribute("lista", carregarFilas());
-			return "ListarFilasConsultar";
+			ArrayList<Fila> filas = filaService.listarFilas();
+			model.addAttribute("filas", filas);
+			return "ChamadoListar";
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "Erro";
 		}
 	}
-	
-	@RequestMapping("/listar_chamados_consultar")
-	public String listarChamadosConsultar(Fila fila, Model model) {
+
+	@RequestMapping("/listar_chamados_exibir")
+	public String listarChamadosExibir(Fila fila, Model model) {
 		try {
-			FilaService fService = new FilaService();
-			fila = fService.carregar(fila.getId());
+			fila = filaService.carregar(fila.getId());
 			model.addAttribute("fila", fila);
-			
-			ChamadoService service = new ChamadoService();
-			ArrayList<Chamado> chamados = service.listarChamados(fila);
+
+			ArrayList<Chamado> chamados = chamadoService.listarChamados(fila);
 			model.addAttribute("chamados", chamados);
 
-			return "ListarChamadosConsultar";
+			return "ChamadoListarExibir";
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "Erro";
 		}
 	}
-
 }

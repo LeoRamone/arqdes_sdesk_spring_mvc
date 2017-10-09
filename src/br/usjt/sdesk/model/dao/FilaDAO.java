@@ -7,16 +7,32 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import br.usjt.sdesk.model.entity.Fila;
 
+@Repository	
 public class FilaDAO {
+	Connection conn;
+	
+	@Autowired
+	public FilaDAO(DataSource ds) throws IOException{
+		try {
+			conn= ds.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IOException(e);
+		}
+	}
 
 	public ArrayList<Fila> listarFilas() throws IOException {
 		String query = "select id_fila, nm_fila from fila";
 		ArrayList<Fila> filas = new ArrayList<>();
 		
-		try(Connection conn = ConnectionFactory.obterConexao();
-			PreparedStatement pst = conn.prepareStatement(query);
+		try(PreparedStatement pst = conn.prepareStatement(query);
 			ResultSet rs = pst.executeQuery();){
 			
 			while(rs.next()){
@@ -31,14 +47,13 @@ public class FilaDAO {
 		}
 		return filas;
 	}
-	
+
 	public Fila carregar(int id) throws IOException {
 		Fila fila = new Fila();
 		fila.setId(id);
 		String query = "select nm_fila from fila where id_fila=?";
 
-		try (Connection conn = ConnectionFactory.obterConexao();
-				PreparedStatement pst = conn.prepareStatement(query);) {
+		try (PreparedStatement pst = conn.prepareStatement(query);) {
 			pst.setInt(1, id);
 			try (ResultSet rs = pst.executeQuery();) {
 
@@ -57,5 +72,4 @@ public class FilaDAO {
 		}
 		return fila;
 	}
-
 }

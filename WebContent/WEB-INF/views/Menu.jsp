@@ -15,7 +15,7 @@
                     </li>
                     <li><a href="listar_filas_fechar">Fechar Chamado</a>
                     </li>
-                    <li><a href="listar_filas_consultar">Consultar Chamado</a>
+                    <li><a href="listar_filas_exibir">Consultar Chamado</a>
                     </li>
                 </ul>
             </div>

@@ -56,18 +56,16 @@ public class Chamado {
 		this.descricao = descricao;
 	}
 	
-	public int getTempo() {
-		/*
-		 * getTime e currentTimeMillis retornam o tempo em milisegundos
-		 * Quando é feita a divisão por 1000 * 60 * 60 * 24, isso é retornado/convertido em dias
-		 * */
+	public int getTempoDias(){
+		//getTime e currentTimeMillis retornam o tempo em milisegundos
+		//dividir por 1000 * 60 * 60 * 24 converte para dias
 		int dias;
-		if(dataFechamento == null) {
-			//Considera a datae hora do servidor para cálculo do tempo aberto
-			dias = (int)(System.currentTimeMillis() - dataAbertura.getTime())/(1000 * 60 * 60 * 24);
-		}else {
-			//Considera a data de fechamento para calcular o tempo que está aberto.
-			dias = (int)(System.currentTimeMillis()) / (1000 * 60 * 60 *24);
+		if(dataFechamento == null){
+			//considera o momento atual para calcular o tempo aberto
+			dias =  (int)(System.currentTimeMillis() - dataAbertura.getTime())/(1000 * 60 * 60 * 24);
+		} else {
+			//considera a data de fechamento para calcular o tempo aberto
+			dias = (int)(dataFechamento.getTime() - dataAbertura.getTime())/(1000 * 60 * 60 * 24);
 		}
 		return dias;
 	}
