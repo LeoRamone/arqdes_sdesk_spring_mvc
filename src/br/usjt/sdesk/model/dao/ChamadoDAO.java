@@ -9,26 +9,25 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.usjt.sdesk.model.entity.Chamado;
 import br.usjt.sdesk.model.entity.Fila;
-
-@Repository	
+@Repository
 public class ChamadoDAO {
 	Connection conn;
 	
 	@Autowired
 	public ChamadoDAO(DataSource ds) throws IOException{
-			try {
-				conn= ds.getConnection();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				throw new IOException(e);
-			}
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IOException(e);
+		}
 	}
+	
 	public int inserirChamado(Chamado chamado) throws IOException {
 		int id = -1;
 		String comando = "insert into chamado (descricao, status, dt_abertura, id_fila) "

@@ -13,15 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.usjt.sdesk.model.entity.Fila;
-
-@Repository	
+@Repository
 public class FilaDAO {
 	Connection conn;
 	
 	@Autowired
-	public FilaDAO(DataSource ds) throws IOException{
+	public FilaDAO(DataSource ds) throws IOException {
 		try {
-			conn= ds.getConnection();
+			conn = ds.getConnection();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new IOException(e);

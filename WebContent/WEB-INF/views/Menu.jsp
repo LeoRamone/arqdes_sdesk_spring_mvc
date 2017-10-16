@@ -1,3 +1,4 @@
+ <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -17,6 +18,14 @@
                     </li>
                     <li><a href="listar_filas_exibir">Consultar Chamado</a>
                     </li>
+                    <c:if test="${empty logado}">
+                        <li><a href="loginForm">Login</a>
+                        </li>
+                    </c:if>
+                    <c:if test="${not empty logado}">
+                        <li><a href="logout">Logout</a>
+                        </li>
+                    </c:if>
                 </ul>
             </div>
         </div>

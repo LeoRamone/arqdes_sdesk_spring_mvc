@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import br.usjt.sdesk.model.dao.FilaDAO;
 import br.usjt.sdesk.model.entity.Fila;
 
-
 @Service
 public class FilaService {
 	private FilaDAO dao;

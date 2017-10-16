@@ -24,6 +24,15 @@
 		<property name="password" value="alunos"></property>
 	</bean>
 	<mvc:interceptors>
-		<bean class="br.usjt.sdesk.interceptor.AutorizadorInterceptor"></bean>
+		<bean class="br.usjt.sdesk.interceptor.AutorizadorInterceptor"/>
 	</mvc:interceptors>
 </beans>
+
+
+
+
+
+
+
+
+

@@ -21,7 +21,7 @@ import br.usjt.sdesk.model.service.ChamadoService;
 import br.usjt.sdesk.model.service.FilaService;
 
 @Controller
-public class ManterChamadosController {	
+public class ManterChamadosController {
 	private FilaService filaService;
 	private ChamadoService chamadoService;
 	
